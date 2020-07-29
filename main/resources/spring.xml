@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context 
+    	http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+	 <bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/expensetravelprd" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean> 
+	<!-- <bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://10.16.5.22:3306/expensetravelprd" />
+		<property name="username" value="emami_root" />
+		<property name="password" value="Emami@travel@2020" />
+	</bean> -->
+
+	<bean id="hibernate4AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.bdo.model.Requisition</value>
+				<value>com.bdo.model.RequisitionAttachment</value>
+				<value>com.bdo.model.Policy</value>
+				<value>com.bdo.model.CityCategory</value>
+				<value>com.bdo.model.CityDistanceMapping</value>
+				<value>com.bdo.model.PJPRequest</value>
+				<value>com.bdo.model.TripNonSales</value>
+				<value>com.bdo.model.RequisitionNonSales</value>
+				<value>com.bdo.model.AttachmentNonSales</value>
+				<value>com.bdo.model.VendorResponseNonSales</value>
+				<value>com.bdo.model.TripSales</value>
+				<value>com.bdo.model.NSAdvancePayFinance</value>
+				<value>com.bdo.model.VendorMaster</value>
+				<value>com.bdo.model.PolicyNonSales</value>
+				<value>com.bdo.model.SalesAdvancePayFinance</value>
+				<value>com.bdo.model.TripForMaster</value>
+				<value>com.bdo.model.TripPurposeMaster</value>
+				<value>com.bdo.model.StatusMaster</value>
+				<value>com.bdo.model.InternationalVendorMaster</value>
+				<value>com.bdo.model.RetainerMaster</value>
+				<value>com.bdo.model.TravelTypeMaster</value>
+				<value>com.bdo.model.TravelThroughMaster</value>
+				<value>com.bdo.model.ExcelQuery</value>
+				<value>com.bdo.model.Budget</value>
+				<value>com.bdo.model.ReferenceMaster</value>
+				<value>com.bdo.model.TripNumberData</value>
+				<value>com.bdo.model.Zone</value>
+				<!-- added by siddharth for sales 23/12/2019 -->
+				<value>com.bdo.model.VendorResponseSales</value>
+				<value>com.bdo.model.ExcelQuerySales</value>
+				<value>com.bdo.model.AttachmentSales</value>
+				
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+
+<bean id="GetTripNumber" class="com.bdo.service.impl.GetTripServiceImpl">
+		<property name="tripNumberDataDao"	ref="TripNumberDataDao" />
+	</bean> 
+	
+	
+	
+	<bean id="requisitionDAO" class="com.bdo.dao.RequisitionDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="RequisitionAttachmentDAO"
+		class="com.bdo.dao.RequisitionAttachmentDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="PolicyDAO" class="com.bdo.dao.PolicyDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="CityCategoryDAO" class="com.bdo.dao.CityCategoryDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="CityDistanceMappingDAO"
+		class="com.bdo.dao.CityDistanceMappingDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="PjpDAO" class="com.bdo.dao.PjpDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="TripNonSalesDAO" class="com.bdo.dao.TripNonSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="ReqNonSalesDAO" class="com.bdo.dao.ReqNonSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="AttachmentNonSalesDAO"
+		class="com.bdo.dao.AttachmentNonSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="VendorResponseNonSalesDAO"
+		class="com.bdo.dao.VendorResponseNonSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="TripSalesDAO" class="com.bdo.dao.TripSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="NSAdvancePayFinanceDAO"
+		class="com.bdo.dao.NSAdvancePayFinanceDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="VendorMasterDAO" class="com.bdo.dao.VendorMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="SalesAdvancePayFinanceDAO"
+		class="com.bdo.dao.SalesAdvancePayFinanceDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="TripForMasterDAO"
+		class="com.bdo.dao.TripForMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="TripPurposeMasterDAO"
+		class="com.bdo.dao.TripPurposeMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="StatusMasterDAO" class="com.bdo.dao.StatusMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="InternationalVendorMasterDAO"
+		class="com.bdo.dao.InternationalVendorMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="RetainerMasterDAO"
+		class="com.bdo.dao.RetainerMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="TravelTypeMasterDAO"
+		class="com.bdo.dao.TravelTypeMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="TravelThroughMasterDAO"
+		class="com.bdo.dao.TravelThroughMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="ExcelQueryDAO" class="com.bdo.dao.ExcelQueryDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<bean id="BudgetDAO" class="com.bdo.dao.BudgetDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	<bean id="ReferenceMasterDAO"
+		class="com.bdo.dao.ReferenceMasterDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+
+	<bean id="TripNumberDataDao"
+		class="com.bdo.dao.TripNumberDataDaoImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="AttachmentSalesDAO"
+		class="com.bdo.dao.AttachmentSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="ZoneDao" class="com.bdo.dao.ZoneDAOImpl">
+	<property name="sessionFactory"
+		ref="hibernate4AnnotatedSessionFactory" />
+</bean>
+
+<!-- added by siddharth on 23/12/2019 -->
+
+<bean id="VendorResponseSalesDAO"
+		class="com.bdo.dao.VendorResponseSalesDAOImpl">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+
+<!-- ====================================================== -->
+	<!-- import different variables according to active profile -->
+	<!-- ====================================================== -->
+	<beans profile="dev">
+		<context:property-placeholder
+			ignore-resource-not-found="true"
+			location="classpath*:application-dev.properties" />
+	</beans>
+
+	<beans profile="qa">
+		<context:property-placeholder
+			ignore-resource-not-found="true"
+			location="classpath*:application-qa.properties" />
+	</beans>
+
+	<beans profile="prod">
+		<context:property-placeholder
+			ignore-resource-not-found="true"
+			location="classpath*:application-prod.properties" />
+	</beans>
+
+</beans>
